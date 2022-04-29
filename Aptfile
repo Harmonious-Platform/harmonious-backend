@@ -1,0 +1,4 @@
+libclang-dev
+libpq-dev
+mysql-client
+sqlite3
