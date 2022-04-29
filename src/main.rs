@@ -3,8 +3,8 @@
 extern crate diesel;
 
 use actix_identity::{CookieIdentityPolicy, IdentityService};
-use actix_web::{middleware, web, App, HttpServer, HttpResponse, Either, Result, Responder, http::{Method, StatusCode}, get};
-use actix_files::{Files, NamedFile};
+use actix_web::{middleware, web, App, HttpServer, HttpResponse, Result, get};
+use actix_files::Files;
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 use time::Duration;
@@ -71,7 +71,7 @@ fn app_config(config: &mut web::ServiceConfig) {
                 foo: "bar".to_string(),
             }))
             .service(Files::new("/static/css/main.css", "css/main.css"))
-            .service(Files::new("/", "static/main/").index_file("index.html"))
+            .service(index)
             .service(register)
 
 
@@ -83,18 +83,15 @@ fn app_config(config: &mut web::ServiceConfig) {
                     .service(auth_handler::logout)
                     .service(auth_handler::get_me),
             )
-            .default_service(web::to(default_handler)),
     );
 }
 
-async fn default_handler(req_method: Method) -> Result<impl Responder> {
-    match req_method {
-        Method::GET => {
-            let file = NamedFile::open("static/404.html")?.set_status_code(StatusCode::NOT_FOUND);
-            Ok(Either::Left(file))
-        }
-        _ => Ok(Either::Right(HttpResponse::MethodNotAllowed().finish())),
-    }
+#[get("/")]
+async fn index() -> Result<HttpResponse> {
+    Ok(HttpResponse::Ok()
+        .content_type("text/html; charset=utf-8")
+        .body(include_str!(r"../static/index.html")))
+
 }
 
 #[get("/register")]
