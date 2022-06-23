@@ -45,7 +45,7 @@ pub async fn logout(id: Identity) -> HttpResponse {
     HttpResponse::Ok().finish()
 }
 #[post("/auth")]
-/// POST -> /auth/login
+/// POST -> /auth/
 pub async fn login(
     auth_data: web::Json<AuthData>,
     id: Identity,

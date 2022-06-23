@@ -7,7 +7,7 @@ lazy_static::lazy_static! {
 
 const SALT: &[u8] = b"supersecuresalt";
 
-// WARNING THIS IS ONLY FOR DEMO PLEASE DO MORE RESEARCH FOR PRODUCTION USE
+// very good yes
 pub fn hash_password(password: &str) -> Result<String, ServiceError> {
     let config = Config {
         secret: SECRET_KEY.as_bytes(),

@@ -4,7 +4,6 @@ extern crate diesel;
 
 use actix_identity::{CookieIdentityPolicy, IdentityService};
 use actix_web::{middleware, web, App, HttpServer, HttpResponse, Result, get};
-use actix_files::Files;
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 use time::Duration;
@@ -52,7 +51,7 @@ async fn main() -> std::io::Result<()> {
                     .path("/")
                     .domain(domain.as_str())
                     .max_age(Duration::days(1))
-                    .secure(false), // this can only be true if you have https
+                    .secure(false),
             ))
             .app_data(web::JsonConfig::default().limit(4096))
             // everything under '/api/' route
@@ -70,7 +69,6 @@ fn app_config(config: &mut web::ServiceConfig) {
             .app_data(web::Data::new(AppState {
                 foo: "bar".to_string(),
             }))
-            .service(Files::new("/static/css/main.css", "css/main.css"))
             .service(index)
             .service(register)
 

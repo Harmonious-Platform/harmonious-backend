@@ -27,11 +27,10 @@ pub fn send_invitation(invitation: &Invitation) -> Result<(), ServiceError> {
 
     let email_body = format!(
         "Please click on the link below to complete registration. <br/>
-         <a href=\"{}/register.html?id={}&email={}\">
+         <a href=\"{}/register/{}\">
          {}/register</a> <br>
          your Invitation expires on <strong>{}</strong>",
         std::env::var("DOMAIN").unwrap_or_else(|_| "localhost".to_string()),
-        invitation.id,
         invitation.email,
         std::env::var("DOMAIN").unwrap_or_else(|_| "localhost".to_string()),
         invitation.expires_at.format("%I:%M %p %A, %-d %B, %C%y")
@@ -42,7 +41,7 @@ pub fn send_invitation(invitation: &Invitation) -> Result<(), ServiceError> {
     let email = Message::builder()
         .from(format!("Harmonious <{}>", sending_email).parse().unwrap())
         .to(format!("Harmonious user<{}>", recipient).parse().unwrap())
-        .subject("Welcome to Harmonious! Please finish registering :)")
+        .subject("Welcome to Harmonious! Please finish registering")
         .header(header::ContentType::TEXT_HTML)
         .body(email_body)
         .expect("failed to build email");

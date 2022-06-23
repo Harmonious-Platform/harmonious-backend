@@ -10,16 +10,16 @@ use crate::utils::hash_password;
 pub struct UserData {
     pub password: String,
 }
-#[post("/register/{invitation_id}")]
-/// POST -> /api/register/{invitation_id}
+#[post("/register/{email}")]
+/// POST -> /api/register/{email}
 pub async fn register_user(
-    invitation_id: web::Path<String>,
+    email: web::Path<String>,
     user_data: web::Json<UserData>,
     pool: web::Data<Pool>,
 ) -> Result<HttpResponse, actix_web::Error> {
     let user = web::block(move || {
         query(
-            invitation_id.into_inner(),
+            email.into_inner(),
             user_data.into_inner().password,
             pool,
         )
