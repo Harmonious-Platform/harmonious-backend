@@ -40,7 +40,7 @@ pub fn send_invitation(invitation: &Invitation) -> Result<(), ServiceError> {
 
     let email = Message::builder()
         .from(format!("Harmonious <{}>", sending_email).parse().unwrap())
-        .to(format!("Harmonious user<{}>", recipient).parse().unwrap())
+        .to(format!("Harmonious user <{}>", recipient).parse().unwrap())
         .subject("Welcome to Harmonious! Please finish registering")
         .header(header::ContentType::TEXT_HTML)
         .body(email_body)
